@@ -9,12 +9,6 @@ class CounterBloc extends Bloc<CounterEvent, int> {
       },
     );
   }
-
-
-
-@override
-  void onChange(Change<int> change) {
-    // TODO: implement onChange
-    super.onChange(change);
-  }
 }
+
+
