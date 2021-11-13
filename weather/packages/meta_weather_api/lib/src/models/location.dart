@@ -62,9 +62,9 @@ class Location {
 
   factory Location.fromMap(Map<String, dynamic> map) => Location(
         title: map['title'],
-        locationType: LocationType.values.firstWhere((element) => element.text == (map['locationType'] as String)),
+        locationType: LocationType.values.firstWhere((element) => element.text == (map['location_type'] as String)),
         woeid: map['woeid'],
-        latLong: LatLong.fromMap(map['latLong'] as String),
+        latLong: LatLong.fromMap(map['latt_long'] as String),
       );
 
   String toJson() => json.encode(toMap());

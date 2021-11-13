@@ -31,7 +31,7 @@ class WeatherCubit extends HydratedCubit<WeatherState> {
           weather: weather.copyWith(temperature: Temperature(value: value)),
         ),
       );
-    } on Exception {
+    } catch (e) {
       emit(state.copyWith(status: WeatherStatus.failure));
     }
   }

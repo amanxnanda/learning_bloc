@@ -30,10 +30,10 @@ class MetaWeatherApiClient {
   Future<Location> locationSearch(String query) async {
     final locationRequest = Uri.https(
       _baseUrl,
-      '/api/location/search',
+      '/api/location/search/',
       <String, String>{'query': query},
     );
-    final locationResponse = await _httpClient.get(locationRequest);
+    final locationResponse = await _httpClient.get(locationRequest, );
 
     if (locationResponse.statusCode != 200) {
       throw LocationIdRequestFailure();

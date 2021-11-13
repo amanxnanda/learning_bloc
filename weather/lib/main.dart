@@ -1,67 +1,69 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:weather/bloc_observer.dart';
+import 'package:weather/theme/theme.dart';
+import 'package:weather/weather/weather.dart';
+import 'package:weather_repository/weather_repository.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  Bloc.observer = SimpleBlocObserver();
+
+  HydratedBloc.storage = await HydratedStorage.build(
+    storageDirectory: kIsWeb ? HydratedStorage.webStorageDirectory : await getTemporaryDirectory(),
+  );
+
+  runApp(
+    WeatherApp(weatherRepository: WeatherRepository()),
+  );
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class WeatherApp extends StatelessWidget {
+  const WeatherApp({
+    required WeatherRepository weatherRepository,
+    Key? key,
+  })  : _weatherRepository = weatherRepository,
+        super(key: key);
+
+  final WeatherRepository _weatherRepository;
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return RepositoryProvider.value(
+      value: _weatherRepository,
+      child: BlocProvider(
+        create: (_) => ThemeCubit(),
+        child: const WeatherAppView(),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
+class WeatherAppView extends StatelessWidget {
+  const WeatherAppView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+    final textTheme = Theme.of(context).textTheme;
+
+    return BlocBuilder<ThemeCubit, Color>(
+      builder: (context, color) {
+        return MaterialApp(
+          theme: ThemeData(
+            primaryColor: color,
+            // textTheme: GoogleFonts.rajdhaniTextTheme(),
+            appBarTheme: AppBarTheme(
+              // titleTextStyle: GoogleFonts.rajdhaniTextTheme(textTheme).apply(bodyColor: Colors.white).headline6,
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
+          ),
+          home: const WeatherPage(),
+        );
+      },
     );
   }
 }
