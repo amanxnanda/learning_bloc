@@ -8,7 +8,7 @@ enum WeatherCondition {
   unknown,
 }
 
-extension on WeatherCondition {
+extension WeatherConditionX on WeatherCondition {
   String get text {
     switch (this) {
       case WeatherCondition.clear:
