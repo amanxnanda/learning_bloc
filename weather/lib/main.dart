@@ -12,10 +12,17 @@ import 'package:weather_repository/weather_repository.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  Bloc.observer = SimpleBlocObserver();
-
-  HydratedBloc.storage = await HydratedStorage.build(
+  BlocOverrides.runZoned(
+    () {},
+    blocObserver: SimpleBlocObserver(),
+  );
+  final storage = await HydratedStorage.build(
     storageDirectory: kIsWeb ? HydratedStorage.webStorageDirectory : await getTemporaryDirectory(),
+  );
+
+  HydratedBlocOverrides.runZoned(
+    () {},
+    storage: storage,
   );
 
   runApp(
@@ -56,10 +63,10 @@ class WeatherAppView extends StatelessWidget {
         return MaterialApp(
           theme: ThemeData(
             primaryColor: color,
-            // textTheme: GoogleFonts.rajdhaniTextTheme(),
+            textTheme: GoogleFonts.rajdhaniTextTheme(),
             appBarTheme: AppBarTheme(
-              // titleTextStyle: GoogleFonts.rajdhaniTextTheme(textTheme).apply(bodyColor: Colors.white).headline6,
-            ),
+                titleTextStyle: GoogleFonts.rajdhaniTextTheme(textTheme).apply(bodyColor: Colors.white).headline6,
+                ),
           ),
           home: const WeatherPage(),
         );
