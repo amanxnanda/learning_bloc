@@ -21,12 +21,10 @@ void main() async {
   );
 
   HydratedBlocOverrides.runZoned(
-    () {},
+    () => runApp(
+      WeatherApp(weatherRepository: WeatherRepository()),
+    ),
     storage: storage,
-  );
-
-  runApp(
-    WeatherApp(weatherRepository: WeatherRepository()),
   );
 }
 
@@ -65,8 +63,8 @@ class WeatherAppView extends StatelessWidget {
             primaryColor: color,
             textTheme: GoogleFonts.rajdhaniTextTheme(),
             appBarTheme: AppBarTheme(
-                titleTextStyle: GoogleFonts.rajdhaniTextTheme(textTheme).apply(bodyColor: Colors.white).headline6,
-                ),
+              titleTextStyle: GoogleFonts.rajdhaniTextTheme(textTheme).apply(bodyColor: Colors.white).headline6,
+            ),
           ),
           home: const WeatherPage(),
         );
