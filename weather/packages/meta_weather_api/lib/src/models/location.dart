@@ -2,29 +2,6 @@ import 'dart:convert';
 
 enum LocationType { city, region, state, province, country, continent }
 
-extension on LocationType {
-  String get text {
-    switch (this) {
-      case LocationType.city:
-        return 'City';
-      case LocationType.region:
-        return 'Region';
-
-      case LocationType.state:
-        return 'State';
-
-      case LocationType.province:
-        return 'Province';
-
-      case LocationType.country:
-        return 'Country';
-
-      case LocationType.continent:
-        return 'Continent';
-    }
-  }
-}
-
 class Location {
   final String title;
   final LocationType locationType;
@@ -54,7 +31,7 @@ class Location {
   Map<String, dynamic> toMap() {
     return {
       'title': title,
-      'locationType': locationType.text,
+      'locationType': locationType.name,
       'woeid': woeid,
       'latLong': latLong.toMap(),
     };
@@ -62,7 +39,7 @@ class Location {
 
   factory Location.fromMap(Map<String, dynamic> map) => Location(
         title: map['title'],
-        locationType: LocationType.values.firstWhere((element) => element.text == (map['location_type'] as String)),
+        locationType: LocationType.values.firstWhere((element) => element.name == (map['location_type'] as String)),
         woeid: map['woeid'],
         latLong: LatLong.fromMap(map['latt_long'] as String),
       );
